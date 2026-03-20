@@ -42,7 +42,7 @@ def get_google_sheet():
         
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)
-    doc = client.open_by_url("https://docs.google.com/spreadsheets/d/1bYv3ff5xwzd4DS3EZUC9Xj6GSpeVmijobbW0svKpqXU/edit")
+    doc = client.open_by_url("https://docs.google.com/spreadsheets/d/1kabj8fnwLtTzzx8GQP8DV4QkMe-EIvZwyjkBHQ5NAPs/edit?gid=1715496861#gid=1715496861")
     return doc
 
 @st.cache_data(ttl=120)
