@@ -224,7 +224,7 @@ def generate_jeet_expert_report(target_name, selected_test):
 # --- 4. Streamlit 웹 UI 구성 ---
 st.set_page_config(page_title="JEET 통합 관리 시스템", layout="wide", page_icon="📊")
 col1, col2 = st.columns([8, 2])
-with col1: st.title("📊 JEET 죽전캠퍼스 성적 통합 관리 시스템")
+with col1: st.title("📊 JEET 광교캠퍼스 성적 통합 관리 시스템")
 with col2: 
     if os.path.exists("logo.png"): st.image("logo.png", width=150)
 
