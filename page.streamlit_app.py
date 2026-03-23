@@ -161,8 +161,11 @@ def generate_jeet_expert_report(target_name, selected_test):
                     txt_s = ax1.text(angle, td, f"{s_v}%", fontsize=9, fontweight='bold', color=COLOR_STUDENT, va='center', ha='right')
                     txt_a = ax1.text(angle, td, f" ({a_v}%)", fontsize=9, fontweight='bold', color=COLOR_RED, va='center', ha='left')
                     for t in [txt_s, txt_a]: t.set_path_effects([path_effects.withStroke(linewidth=3, foreground='white')])
-                ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2, fontsize=8, frameon=False)
-                ax1.set_title("▶ 영역별 핵심 역량 지표 (%)", pad=40, fontsize=14, fontweight='bold', color=COLOR_NAVY)
+                # 1.15 -> 1.30 으로 올려서 표와 겹치지 않게 띄움
+                ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.30), ncol=2, fontsize=8, frameon=False)
+
+                # pad=40 -> 55 로 키워서 제목이 범례 위로 안전하게 올라가게 띄움
+                ax1.set_title("▶ 영역별 핵심 역량 지표 (%)", pad=55, fontsize=14, fontweight='bold', color=COLOR_NAVY)
 
                 #
                 # --- 새로운 단원별 성취도 오버랩 바 차트 시작 ---
