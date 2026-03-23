@@ -24,8 +24,8 @@ else:
 
 plt.rcParams['axes.unicode_minus'] = False
   
-COLOR_NAVY = '#434190'; COLOR_RED = '#E53E3E'; COLOR_STUDENT = '#3182CE'
-COLOR_AVG = '#CBD5E0'; COLOR_GRID = '#EDF2F7'; COLOR_BG = '#F8F9FA'
+COLOR_NAVY = '#1F4E3D'; COLOR_RED = '#D97706'; COLOR_STUDENT = '#2F855A'
+COLOR_AVG = '#9CA3AF'; COLOR_GRID = '#E5E7EB'; COLOR_BG = '#F9FAFB'
 
 # --- 2. 구글 스프레드시트 연동 및 캐시 설정 ---
 @st.cache_resource
