@@ -151,7 +151,7 @@ def generate_jeet_expert_report(target_name, selected_test):
                 ax1.grid(color=COLOR_GRID, linestyle=':', linewidth=1) # 거미줄 선을 얇은 점선으로 변경
                 for i in range(len(labels)):
                     angle = angles[i]; label_text = labels[i]
-                    if angle == 0: ha, va, dist = 'center', 'bottom', 125
+                    if angle == 0: ha, va, dist = 'center', 'bottom', 105
                     elif 0 < angle < np.pi: ha, va, dist = 'left', 'center', 120
                     elif angle == np.pi: ha, va, dist = 'center', 'top', 125
                     else: ha, va, dist = 'right', 'center', 120
@@ -162,7 +162,7 @@ def generate_jeet_expert_report(target_name, selected_test):
                     txt_a = ax1.text(angle, td, f" ({a_v}%)", fontsize=9, fontweight='bold', color=COLOR_RED, va='center', ha='left')
                     for t in [txt_s, txt_a]: t.set_path_effects([path_effects.withStroke(linewidth=3, foreground='white')])
                 # 
-                ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.07), ncol=2, fontsize=8, frameon=False)
+                ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.12), ncol=2, fontsize=8, frameon=False)
                 #
                 
                 # --- 새로운 단원별 성취도 오버랩 바 차트 시작 ---
