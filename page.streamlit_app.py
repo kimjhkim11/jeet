@@ -144,7 +144,8 @@ def generate_jeet_expert_report(target_name, selected_test):
                 ax1.set_theta_direction(-1); ax1.set_theta_offset(np.pi/2.0)
                 ax1.plot(angles, a_vals, color=COLOR_AVG, linewidth=1, linestyle='--', label='전체 평균')
                 ax1.fill(angles, a_vals, color=COLOR_AVG, alpha=0.1)
-                ax1.plot(angles, s_vals, color=COLOR_STUDENT, linewidth=2, marker='o', markersize=6, label='학생 점수')
+                ax1.plot(angles, s_vals, color=COLOR_STUDENT, linewidth=2.5, label='학생 점수', 
+                path_effects=[path_effects.SimpleLineShadow(shadow_color='#888888', alpha=0.6, offset=(2, -2)), path_effects.Normal()])
                 ax1.fill(angles, s_vals, color=COLOR_STUDENT, alpha=0.15) # 학생 면적 옅게 칠하기
                 ax1.set_ylim(0, 110); ax1.set_xticks(angles[:-1]); ax1.set_xticklabels([]); ax1.set_yticklabels([]) 
                 ax1.spines['polar'].set_visible(False) # 바깥쪽 둥근 원 테두리 숨기기
