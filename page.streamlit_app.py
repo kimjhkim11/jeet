@@ -131,34 +131,51 @@ def generate_jeet_expert_report(target_name, selected_test):
                 info_text = f"학교: {s_row.get('학교', '')}  |  학년: {student_grade}  |  이름: {student_name}  |  과정: {selected_test}"
                 fig.text(0.5, 0.84, info_text, ha='center', fontsize=15, fontweight='bold', color='#222')
 
-                ax1 = fig.add_axes([0.10, 0.52, 0.32, 0.22], polar=True)
+                #
+                # --- 새로운 롤리팝 차트 코드 시작 ---
+                ax1 = fig.add_axes([0.10, 0.52, 0.32, 0.22]) 
+
                 all_cats = cat_ratio.index.tolist()
                 ordered_labels = ['계산력'] + [c for c in all_cats if c != '계산력'] if '계산력' in all_cats else all_cats
                 s_ordered = cat_ratio.reindex(ordered_labels)
                 a_ordered = avg_cat_ratio.reindex(ordered_labels)
-                labels = s_ordered.index.tolist()
-                s_vals = s_ordered.values.tolist() + [s_ordered.values[0]]
-                a_vals = a_ordered.values.tolist() + [a_ordered.values[0]]
-                angles = np.linspace(0, 2*np.pi, len(labels), endpoint=False).tolist() + [0]
-                ax1.set_theta_direction(-1); ax1.set_theta_offset(np.pi/2.0)
-                ax1.plot(angles, a_vals, color=COLOR_AVG, linewidth=1, linestyle='--', label='전체 평균')
-                ax1.fill(angles, a_vals, color=COLOR_AVG, alpha=0.1)
-                ax1.plot(angles, s_vals, color=COLOR_STUDENT, linewidth=2.5, label='학생 점수')
-                ax1.set_ylim(0, 110); ax1.set_xticks(angles[:-1]); ax1.set_xticklabels([]); ax1.set_yticklabels([]) 
-                for i in range(len(labels)):
-                    angle = angles[i]; label_text = labels[i]
-                    if angle == 0: ha, va, dist = 'center', 'bottom', 115
-                    elif 0 < angle < np.pi: ha, va, dist = 'left', 'center', 110
-                    elif angle == np.pi: ha, va, dist = 'center', 'top', 115
-                    else: ha, va, dist = 'right', 'center', 110
-                    ax1.text(angle, dist, label_text, fontsize=10, fontweight='bold', va=va, ha=ha, color=COLOR_NAVY)
-                    s_v, a_v = int(s_vals[i]), int(a_vals[i])
-                    td = s_v + 10 if s_v < 85 else s_v - 18
-                    txt_s = ax1.text(angle, td, f"{s_v}%", fontsize=9, fontweight='bold', color=COLOR_STUDENT, va='center', ha='right')
-                    txt_a = ax1.text(angle, td, f" ({a_v}%)", fontsize=9, fontweight='bold', color=COLOR_RED, va='center', ha='left')
-                    for t in [txt_s, txt_a]: t.set_path_effects([path_effects.withStroke(linewidth=3, foreground='white')])
-                ax1.legend(loc='upper right', bbox_to_anchor=(1.45, 1.15), fontsize=8, frameon=False)
-                ax1.set_title("▶ 영역별 핵심 역량 지표 (%)", pad=30, fontsize=14, fontweight='bold', color=COLOR_NAVY)        
+
+                x_pos = np.arange(len(ordered_labels))
+                offset = 0.15 # 학생과 평균 선 사이의 간격
+
+                # 1. 전체 평균 (배경 느낌으로 회색 톤)
+                ax1.vlines(x=x_pos - offset, ymin=0, ymax=a_ordered, color=COLOR_AVG, alpha=0.5, linewidth=2.5, zorder=2)
+                ax1.scatter(x_pos - offset, a_ordered, color=COLOR_AVG, alpha=0.5, s=60, zorder=3, label='전체 평균')
+
+                # 2. 학생 점수 (메인으로 눈에 띄게 컬러풀하게)
+                ax1.vlines(x=x_pos + offset, ymin=0, ymax=s_ordered, color=COLOR_STUDENT, linewidth=3, zorder=4)
+                ax1.scatter(x_pos + offset, s_ordered, color=COLOR_STUDENT, s=80, zorder=5, label='학생 점수')
+
+                # 3. 그래프 축 및 배경 스타일링
+                ax1.set_ylim(0, 115) # 동그라미랑 숫자 들어갈 위쪽 여백 확보
+                ax1.set_xticks(x_pos)
+                ax1.set_xticklabels(ordered_labels, fontsize=10, fontweight='bold', color=COLOR_NAVY)
+                ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=2, fontsize=8, frameon=False)
+                ax1.set_title("▶ 영역별 핵심 역량 지표 (%)", pad=30, fontsize=14, fontweight='bold', color=COLOR_NAVY)
+                ax1.grid(axis='y', color=COLOR_GRID, linestyle='--', linewidth=0.5, zorder=0)
+
+                # 4. 동그라미 위에 정확한 점수 텍스트 달아주기
+                for i in range(len(ordered_labels)):
+                    s_val = int(s_ordered.iloc[i])
+                    a_val = int(a_ordered.iloc[i])
+                    
+                    # 학생 점수 텍스트
+                    ax1.text(x_pos[i] + offset, s_val + 4, f'{s_val}', ha='center', va='bottom', fontsize=9, fontweight='bold', color=COLOR_STUDENT)
+                    # 평균 점수 텍스트
+                    ax1.text(x_pos[i] - offset, a_val + 4, f'{a_val}', ha='center', va='bottom', fontsize=9, fontweight='bold', color='#555555')
+
+                # 5. 불필요한 테두리 및 Y축 숫자 제거 (디자인 깔끔하게)
+                ax1.spines['top'].set_visible(False)
+                ax1.spines['right'].set_visible(False)
+                ax1.spines['left'].set_visible(False)
+                ax1.spines['bottom'].set_color(COLOR_GRID) # 아래쪽 선만 옅게 남기기
+                ax1.set_yticks([]) 
+                #
                 
                 ax2 = fig.add_axes([0.55, 0.52, 0.35, 0.20])
                 x_pos = np.arange(len(unit_data))
