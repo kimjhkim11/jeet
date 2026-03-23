@@ -130,45 +130,12 @@ def generate_jeet_expert_report(target_name, selected_test):
                 
                 info_text = f"학교: {s_row.get('학교', '')}  |  학년: {student_grade}  |  이름: {student_name}  |  과정: {selected_test}"
                 fig.text(0.5, 0.84, info_text, ha='center', fontsize=15, fontweight='bold', color='#222')
-  
 
-                # 1. 방사형(polar) 속성을 제거하고 일반 축으로 생성해
-                ax1 = fig.add_axes([0.10, 0.52, 0.32, 0.22]) 
-
+                ax1 = fig.add_axes([0.10, 0.52, 0.32, 0.22], polar=True)
                 all_cats = cat_ratio.index.tolist()
                 ordered_labels = ['계산력'] + [c for c in all_cats if c != '계산력'] if '계산력' in all_cats else all_cats
                 s_ordered = cat_ratio.reindex(ordered_labels)
                 a_ordered = avg_cat_ratio.reindex(ordered_labels)
-
-                x_pos = np.arange(len(ordered_labels))
-                width = 0.35 # 막대 두께
-
-                # 2. 학생 점수와 전체 평균을 나란히 그리기
-                rects1 = ax1.bar(x_pos - width/2, s_ordered, width, label='학생 점수', color=COLOR_STUDENT, zorder=3)
-                rects2 = ax1.bar(x_pos + width/2, a_ordered, width, label='전체 평균', color=COLOR_AVG, alpha=0.5, zorder=3)
-
-                # 3. 그래프 축 및 배경 스타일링
-                ax1.set_ylim(0, 110)
-                ax1.set_xticks(x_pos)
-                ax1.set_xticklabels(ordered_labels, fontsize=10, fontweight='bold', color=COLOR_NAVY)
-                ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=2, fontsize=8, frameon=False)
-                ax1.set_title("▶ 영역별 핵심 역량 지표 (%)", pad=30, fontsize=14, fontweight='bold', color=COLOR_NAVY)
-                ax1.grid(axis='y', color=COLOR_GRID, linestyle='--', linewidth=0.5, zorder=0)
-
-                # 4. 막대 위에 정확한 점수 텍스트 달아주기
-                for bar in rects1:
-                height = int(bar.get_height())
-                ax1.text(bar.get_x() + bar.get_width()/2., height + 2, f'{height}', ha='center', va='bottom', fontsize=9, fontweight='bold', color=COLOR_STUDENT)
-                for bar in rects2:
-                height = int(bar.get_height())
-                ax1.text(bar.get_x() + bar.get_width()/2., height + 2, f'{height}', ha='center', va='bottom', fontsize=9, fontweight='bold', color='#555555')
-
-                # 불필요한 테두리 제거 (디자인 깔끔하게)
-                ax1.spines['top'].set_visible(False)
-                ax1.spines['right'].set_visible(False)
-                ax1.spines['left'].set_visible(False)
-                ax1.set_yticks([]) # Y축 숫자 숨김 (막대 위에 숫자가 있으니까)
-
                 labels = s_ordered.index.tolist()
                 s_vals = s_ordered.values.tolist() + [s_ordered.values[0]]
                 a_vals = a_ordered.values.tolist() + [a_ordered.values[0]]
