@@ -161,13 +161,10 @@ def generate_jeet_expert_report(target_name, selected_test):
                     txt_s = ax1.text(angle, td, f"{s_v}%", fontsize=9, fontweight='bold', color=COLOR_STUDENT, va='center', ha='right')
                     txt_a = ax1.text(angle, td, f" ({a_v}%)", fontsize=9, fontweight='bold', color=COLOR_RED, va='center', ha='left')
                     for t in [txt_s, txt_a]: t.set_path_effects([path_effects.withStroke(linewidth=3, foreground='white')])
-                # 1.15 -> 1.35 으로 올려서 표와 겹치지 않게 띄움
-                ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=2, fontsize=8, frameon=False)
-
-                # pad=40 -> 55 로 키워서 제목이 범례 위로 안전하게 올라가게 띄움
-                ax1.set_title("▶ 영역별 핵심 역량 지표 (%)", pad=55, fontsize=14, fontweight='bold', color=COLOR_NAVY)
-
+                # 
+                ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.07), ncol=2, fontsize=8, frameon=False)
                 #
+                
                 # --- 새로운 단원별 성취도 오버랩 바 차트 시작 ---
                 ax2 = fig.add_axes([0.55, 0.52, 0.35, 0.20])
                 x_pos = np.arange(len(unit_data))
@@ -184,9 +181,10 @@ def generate_jeet_expert_report(target_name, selected_test):
                 max_val = unit_data['배점'].max()
                 max_val = 10 if pd.isna(max_val) or max_val == 0 else max_val
                 ax2.set_ylim(0, max_val * 1.4) # 숫자 라벨을 위한 위쪽 여백
-                
-                ax2.set_title("▶ 단원별 성취도", pad=30, fontsize=14, fontweight='bold', color=COLOR_NAVY)
-                ax2.legend(loc='upper center', bbox_to_anchor=(0.5, 1.12), ncol=2, fontsize=8, frameon=False)
+
+                #
+                ax2.legend(loc='upper center', bbox_to_anchor=(0.5, 1.18), ncol=2, fontsize=8, frameon=False)
+                #
                 ax2.grid(axis='y', color=COLOR_GRID, linestyle='--', linewidth=0.5, zorder=0)
                 
                 # 4. 막대 위에 점수 텍스트 표시
@@ -206,6 +204,8 @@ def generate_jeet_expert_report(target_name, selected_test):
                 ax2.spines['left'].set_visible(False)
                 ax2.spines['bottom'].set_color(COLOR_GRID)
                 ax2.set_yticks([]) 
+                fig.text(0.26, 0.78, "▶ 영역별 핵심 역량 지표 (%)", fontsize=14, fontweight='bold', color=COLOR_NAVY, ha='center')
+                fig.text(0.725, 0.78, "▶ 단원별 성취도", fontsize=14, fontweight='bold', color=COLOR_NAVY, ha='center')
                 # --- 새로운 단원별 성취도 오버랩 바 차트 끝 ---
         
   
