@@ -211,7 +211,7 @@ def generate_jeet_expert_report(target_name, selected_test):
   
                 line_footer = plt.Line2D([0.05, 0.95], [0.12, 0.12], color=COLOR_NAVY, linewidth=1, transform=fig.transFigure)
                 fig.lines.append(line_footer)
-                campuses = [("수지 캠퍼스: 276-8003", "풍덕천로 129번길 16-1"), ("죽전 캠퍼스: 263-8003", "기흥구 죽현로 29"), ("광교 캠퍼스: 257-8003", "영통구 혜명로 10")]
+                campuses = [("수지 캠퍼스: 276-8003", "풍덕천로 129번길 16-1"), ("죽전 캠퍼스: 263-8003", "기흥구 죽현로 29"), ("광교 캠퍼스: 257-8003", "영통구 혜령로 10")]
                 for i, (name, addr) in enumerate(campuses):
                     fig.text([0.22, 0.50, 0.78][i], 0.08, name, ha='center', fontsize=10, fontweight='bold', color=COLOR_NAVY)
                     fig.text([0.22, 0.50, 0.78][i], 0.05, addr, ha='center', fontsize=7.5, color='#555')
