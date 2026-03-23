@@ -178,7 +178,7 @@ def generate_jeet_expert_report(target_name, selected_test):
                 
                 # 3. 축 및 배경 설정
                 ax2.set_xticks(x_pos)
-                ax2.set_xticklabels([textwrap.fill(str(l), 5) for l in unit_data.index], fontsize=8, fontweight='bold', color=COLOR_NAVY)
+                ax2.set_xticklabels([textwrap.fill(str(l), 8) for l in unit_data.index], fontsize=8, fontweight='bold', color=COLOR_NAVY, rotation=45, ha='right')
                 max_val = unit_data['배점'].max()
                 max_val = 10 if pd.isna(max_val) or max_val == 0 else max_val
                 ax2.set_ylim(0, max_val * 1.4) # 숫자 라벨을 위한 위쪽 여백
