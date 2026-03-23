@@ -162,7 +162,7 @@ def generate_jeet_expert_report(target_name, selected_test):
                     txt_a = ax1.text(angle, td, f" ({a_v}%)", fontsize=9, fontweight='bold', color=COLOR_RED, va='center', ha='left')
                     for t in [txt_s, txt_a]: t.set_path_effects([path_effects.withStroke(linewidth=3, foreground='white')])
                 # 
-                ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.12), ncol=2, fontsize=8, frameon=False)
+                ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2, fontsize=8, frameon=False)
                 #
                 
                 # --- 새로운 단원별 성취도 오버랩 바 차트 시작 ---
