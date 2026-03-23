@@ -145,14 +145,17 @@ def generate_jeet_expert_report(target_name, selected_test):
                 ax1.set_theta_direction(-1); ax1.set_theta_offset(np.pi/2.0)
                 ax1.plot(angles, a_vals, color=COLOR_AVG, linewidth=1, linestyle='--', label='전체 평균')
                 ax1.fill(angles, a_vals, color=COLOR_AVG, alpha=0.1)
-                ax1.plot(angles, s_vals, color=COLOR_STUDENT, linewidth=2.5, label='학생 점수')
+                ax1.plot(angles, s_vals, color=COLOR_STUDENT, linewidth=2, marker='o', markersize=6, label='학생 점수')
+                ax1.fill(angles, s_vals, color=COLOR_STUDENT, alpha=0.15) # 학생 면적 옅게 칠하기
                 ax1.set_ylim(0, 110); ax1.set_xticks(angles[:-1]); ax1.set_xticklabels([]); ax1.set_yticklabels([]) 
+                ax1.spines['polar'].set_visible(False) # 바깥쪽 둥근 원 테두리 숨기기
+                ax1.grid(color=COLOR_GRID, linestyle=':', linewidth=1) # 거미줄 선을 얇은 점선으로 변경
                 for i in range(len(labels)):
                     angle = angles[i]; label_text = labels[i]
-                    if angle == 0: ha, va, dist = 'center', 'bottom', 115
-                    elif 0 < angle < np.pi: ha, va, dist = 'left', 'center', 110
-                    elif angle == np.pi: ha, va, dist = 'center', 'top', 115
-                    else: ha, va, dist = 'right', 'center', 110
+                    if angle == 0: ha, va, dist = 'center', 'bottom', 125
+                    elif 0 < angle < np.pi: ha, va, dist = 'left', 'center', 120
+                    elif angle == np.pi: ha, va, dist = 'center', 'top', 125
+                    else: ha, va, dist = 'right', 'center', 120
                     ax1.text(angle, dist, label_text, fontsize=10, fontweight='bold', va=va, ha=ha, color=COLOR_NAVY)
                     s_v, a_v = int(s_vals[i]), int(a_vals[i])
                     td = s_v + 10 if s_v < 85 else s_v - 18
