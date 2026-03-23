@@ -131,38 +131,44 @@ def generate_jeet_expert_report(target_name, selected_test):
                 info_text = f"학교: {s_row.get('학교', '')}  |  학년: {student_grade}  |  이름: {student_name}  |  과정: {selected_test}"
                 fig.text(0.5, 0.84, info_text, ha='center', fontsize=15, fontweight='bold', color='#222')
 
-                ax1 = fig.add_axes([0.10, 0.52, 0.32, 0.22], polar=True)
+#
+                # 1. 방사형(polar) 속성을 제거하고 일반 축으로 생성해
+                ax1 = fig.add_axes([0.10, 0.52, 0.32, 0.22]) 
+
                 all_cats = cat_ratio.index.tolist()
                 ordered_labels = ['계산력'] + [c for c in all_cats if c != '계산력'] if '계산력' in all_cats else all_cats
                 s_ordered = cat_ratio.reindex(ordered_labels)
                 a_ordered = avg_cat_ratio.reindex(ordered_labels)
-                labels = s_ordered.index.tolist()
-                s_vals = s_ordered.values.tolist() + [s_ordered.values[0]]
-                a_vals = a_ordered.values.tolist() + [a_ordered.values[0]]
-                angles = np.linspace(0, 2*np.pi, len(labels), endpoint=False).tolist() + [0]
-                ax1.set_theta_direction(-1); ax1.set_theta_offset(np.pi/2.0)
-                ax1.plot(angles, a_vals, color=COLOR_AVG, linewidth=1, linestyle='--', label='전체 평균')
-                ax1.fill(angles, a_vals, color=COLOR_AVG, alpha=0.1)
-                ax1.plot(angles, s_vals, color=COLOR_STUDENT, linewidth=2, marker='o', markersize=6, label='학생 점수')
-                ax1.fill(angles, s_vals, color=COLOR_STUDENT, alpha=0.15) # 학생 면적 옅게 칠하기
-                ax1.set_ylim(0, 110); ax1.set_xticks(angles[:-1]); ax1.set_xticklabels([]); ax1.set_yticklabels([]) 
-                ax1.spines['polar'].set_visible(False) # 바깥쪽 둥근 원 테두리 숨기기
-                ax1.grid(color=COLOR_GRID, linestyle=':', linewidth=1) # 거미줄 선을 얇은 점선으로 변경
-                for i in range(len(labels)):
-                    angle = angles[i]; label_text = labels[i]
-                    if angle == 0: ha, va, dist = 'center', 'bottom', 125
-                    elif 0 < angle < np.pi: ha, va, dist = 'left', 'center', 120
-                    elif angle == np.pi: ha, va, dist = 'center', 'top', 125
-                    else: ha, va, dist = 'right', 'center', 120
-                    ax1.text(angle, dist, label_text, fontsize=10, fontweight='bold', va=va, ha=ha, color=COLOR_NAVY)
-                    s_v, a_v = int(s_vals[i]), int(a_vals[i])
-                    td = s_v + 10 if s_v < 85 else s_v - 18
-                    txt_s = ax1.text(angle, td, f"{s_v}%", fontsize=9, fontweight='bold', color=COLOR_STUDENT, va='center', ha='right')
-                    txt_a = ax1.text(angle, td, f" ({a_v}%)", fontsize=9, fontweight='bold', color=COLOR_RED, va='center', ha='left')
-                    for t in [txt_s, txt_a]: t.set_path_effects([path_effects.withStroke(linewidth=3, foreground='white')])
-                ax1.legend(loc='upper right', bbox_to_anchor=(1.45, 1.15), fontsize=8, frameon=False)
+
+                x_pos = np.arange(len(ordered_labels))
+                width = 0.35 # 막대 두께
+                
+                # 2. 학생 점수와 전체 평균을 나란히 그리기
+                rects1 = ax1.bar(x_pos - width/2, s_ordered, width, label='학생 점수', color=COLOR_STUDENT, zorder=3)
+                rects2 = ax1.bar(x_pos + width/2, a_ordered, width, label='전체 평균', color=COLOR_AVG, alpha=0.5, zorder=3)
+                
+                # 3. 그래프 축 및 배경 스타일링
+                ax1.set_ylim(0, 110)
+                ax1.set_xticks(x_pos)
+                ax1.set_xticklabels(ordered_labels, fontsize=10, fontweight='bold', color=COLOR_NAVY)
+                ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=2, fontsize=8, frameon=False)
                 ax1.set_title("▶ 영역별 핵심 역량 지표 (%)", pad=30, fontsize=14, fontweight='bold', color=COLOR_NAVY)
-  
+                ax1.grid(axis='y', color=COLOR_GRID, linestyle='--', linewidth=0.5, zorder=0)
+                
+                # 4. 막대 위에 정확한 점수 텍스트 달아주기
+                for bar in rects1:
+                    height = int(bar.get_height())
+                    ax1.text(bar.get_x() + bar.get_width()/2., height + 2, f'{height}', ha='center', va='bottom', fontsize=9, fontweight='bold', color=COLOR_STUDENT)
+                for bar in rects2:
+                    height = int(bar.get_height())
+                    ax1.text(bar.get_x() + bar.get_width()/2., height + 2, f'{height}', ha='center', va='bottom', fontsize=9, fontweight='bold', color='#555555')
+                
+                # 불필요한 테두리 제거 (디자인 깔끔하게)
+                ax1.spines['top'].set_visible(False)
+                ax1.spines['right'].set_visible(False)
+                ax1.spines['left'].set_visible(False)
+                ax1.set_yticks([]) # Y축 숫자 숨김 (막대 위에 숫자가 있으니까)
+                
                 ax2 = fig.add_axes([0.55, 0.52, 0.35, 0.20])
                 x_pos = np.arange(len(unit_data))
                 bars = ax2.bar(x_pos, unit_data['득점'], color=COLOR_STUDENT, alpha=0.8, width=0.5, zorder=3)
