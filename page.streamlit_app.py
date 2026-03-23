@@ -166,19 +166,46 @@ def generate_jeet_expert_report(target_name, selected_test):
                 ax1.set_title("▶ 영역별 핵심 역량 지표 (%)", pad=30, fontsize=14, fontweight='bold', color=COLOR_NAVY)
 
                 #
-                
+                # --- 새로운 단원별 성취도 오버랩 바 차트 시작 ---
                 ax2 = fig.add_axes([0.55, 0.52, 0.35, 0.20])
                 x_pos = np.arange(len(unit_data))
-                bars = ax2.bar(x_pos, unit_data['득점'], color=COLOR_STUDENT, alpha=0.8, width=0.5, zorder=3)
-                ax2.scatter(x_pos, unit_avg_data['평균득점'], color=COLOR_RED, marker='_', s=1000, linewidth=3, zorder=4)
-                ax2.set_xticks(x_pos); ax2.set_xticklabels([textwrap.fill(str(l), 5) for l in unit_data.index], fontsize=8, fontweight='bold')
-                max_val = unit_data['배점'].max(); max_val = 10 if pd.isna(max_val) or max_val == 0 else max_val
-                ax2.set_ylim(0, max_val * 1.5); ax2.set_title("▶ 단원별 성취도", pad=15, fontsize=14, fontweight='bold', color=COLOR_NAVY)
-                ax2.grid(axis='y', color=COLOR_GRID, linestyle='-', linewidth=0.5, zorder=0)
-                for i, bar in enumerate(bars):
-                    sv, av = int(bar.get_height()), int(unit_avg_data['평균득점'].iloc[i])
-                    ax2.text(bar.get_x() + bar.get_width()/2, sv + 0.5, f"{sv}", ha='right', va='bottom', fontsize=9, fontweight='bold', color=COLOR_STUDENT)
-                    ax2.text(bar.get_x() + bar.get_width()/2, sv + 0.5, f" ({av})", ha='left', va='bottom', fontsize=9, fontweight='bold', color=COLOR_RED)
+                
+                # 1. 전체 평균 (두껍고 연한 배경 막대)
+                bars_avg = ax2.bar(x_pos, unit_avg_data['평균득점'], color=COLOR_AVG, alpha=0.25, width=0.55, label='전체 평균', zorder=2)
+                
+                # 2. 학생 득점 (얇고 진한 전경 막대)
+                bars_stu = ax2.bar(x_pos, unit_data['득점'], color=COLOR_STUDENT, alpha=0.9, width=0.25, label='학생 점수', zorder=3)
+                
+                # 3. 축 및 배경 설정
+                ax2.set_xticks(x_pos)
+                ax2.set_xticklabels([textwrap.fill(str(l), 5) for l in unit_data.index], fontsize=8, fontweight='bold', color=COLOR_NAVY)
+                max_val = unit_data['배점'].max()
+                max_val = 10 if pd.isna(max_val) or max_val == 0 else max_val
+                ax2.set_ylim(0, max_val * 1.4) # 숫자 라벨을 위한 위쪽 여백
+                
+                ax2.set_title("▶ 단원별 성취도", pad=30, fontsize=14, fontweight='bold', color=COLOR_NAVY)
+                ax2.legend(loc='upper center', bbox_to_anchor=(0.5, 1.25), ncol=2, fontsize=8, frameon=False)
+                ax2.grid(axis='y', color=COLOR_GRID, linestyle='--', linewidth=0.5, zorder=0)
+                
+                # 4. 막대 위에 점수 텍스트 표시
+                for i in range(len(unit_data)):
+                    sv = int(unit_data['득점'].iloc[i])
+                    av = int(unit_avg_data['평균득점'].iloc[i])
+                    
+                    # 학생 점수 (파란색)
+                    ax2.text(x_pos[i], sv + 0.3, f"{sv}", ha='center', va='bottom', fontsize=9, fontweight='bold', color=COLOR_STUDENT)
+                    # 평균 점수 (회색, 학생 점수와 겹치지 않게 살짝 옆으로 배치)
+                    if sv != av:
+                        ax2.text(x_pos[i] + 0.28, av, f"({av})", ha='left', va='center', fontsize=8, fontweight='bold', color='#757575')
+                    
+                # 5. 테두리 깔끔하게 정리
+                ax2.spines['top'].set_visible(False)
+                ax2.spines['right'].set_visible(False)
+                ax2.spines['left'].set_visible(False)
+                ax2.spines['bottom'].set_color(COLOR_GRID)
+                ax2.set_yticks([]) 
+                # --- 새로운 단원별 성취도 오버랩 바 차트 끝 ---
+        
   
                 # 🌟 [부드러운 분석 문구 반영]
                 rect_diag = plt.Rectangle((0.08, 0.15), 0.84, 0.32, fill=True, facecolor=COLOR_BG, edgecolor=COLOR_GRID, transform=fig.transFigure)
