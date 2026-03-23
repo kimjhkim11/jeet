@@ -150,10 +150,10 @@ def generate_jeet_expert_report(target_name, selected_test):
                 ax1.grid(color=COLOR_GRID, linestyle=':', linewidth=1) # 거미줄 선을 얇은 점선으로 변경
                 for i in range(len(labels)):
                     angle = angles[i]; label_text = labels[i]
-                    if angle == 0: ha, va, dist = 'center', 'bottom', 115
-                    elif 0 < angle < np.pi: ha, va, dist = 'left', 'center', 110
-                    elif angle == np.pi: ha, va, dist = 'center', 'top', 115
-                    else: ha, va, dist = 'right', 'center', 110
+                    if angle == 0: ha, va, dist = 'center', 'bottom', 125
+                    elif 0 < angle < np.pi: ha, va, dist = 'left', 'center', 120
+                    elif angle == np.pi: ha, va, dist = 'center', 'top', 125
+                    else: ha, va, dist = 'right', 'center', 120
                     ax1.text(angle, dist, label_text, fontsize=10, fontweight='bold', va=va, ha=ha, color=COLOR_NAVY)
                     s_v, a_v = int(s_vals[i]), int(a_vals[i])
                     td = s_v + 10 if s_v < 85 else s_v - 18
