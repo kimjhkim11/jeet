@@ -146,6 +146,8 @@ def generate_jeet_expert_report(target_name, selected_test):
                 ax1.plot(angles, s_vals, color=COLOR_STUDENT, linewidth=2, marker='o', markersize=6, label='학생 점수')
                 ax1.fill(angles, s_vals, color=COLOR_STUDENT, alpha=0.15) # 학생 면적 옅게 칠하기
                 ax1.set_ylim(0, 110); ax1.set_xticks(angles[:-1]); ax1.set_xticklabels([]); ax1.set_yticklabels([]) 
+                ax1.spines['polar'].set_visible(False) # 바깥쪽 둥근 원 테두리 숨기기
+                ax1.grid(color=COLOR_GRID, linestyle=':', linewidth=1) # 거미줄 선을 얇은 점선으로 변경
                 for i in range(len(labels)):
                     angle = angles[i]; label_text = labels[i]
                     if angle == 0: ha, va, dist = 'center', 'bottom', 115
