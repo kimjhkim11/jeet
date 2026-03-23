@@ -125,7 +125,7 @@ def generate_jeet_expert_report(target_name, selected_test):
                     logo_ax.imshow(logo_img)
                     logo_ax.axis('off')
 
-                fig.text(0.31, 0.88, 'JEET', fontsize=42, fontweight='bold', color=COLOR_RED, ha='right')
+                fig.text(0.31, 0.88, 'JEET', fontsize=42, fontweight='bold', color='red', ha='right')
                 fig.text(0.33, 0.88, '수학 능력 분석 리포트', fontsize=32, fontweight='bold', color=COLOR_NAVY, ha='left')
                 
                 info_text = f"학교: {s_row.get('학교', '')}  |  학년: {student_grade}  |  이름: {student_name}  |  과정: {selected_test}"
